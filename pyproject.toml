@@ -6,5 +6,9 @@ build-backend = "setuptools.backends.legacy:build"
 name = "codepaste"
 version = "0.1.0"
  
+[project.scripts]
+codepaste = "codepaste:main"
+ 
 [tool.setuptools.package-data]
 codepaste = ["files/*"]
+ 
