@@ -1,0 +1,27 @@
+name: publish
+ 
+on:
+  push:
+    branches: [main]
+ 
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: |
+          python -c "
+          import re; from datetime import datetime
+          v = datetime.now().strftime('%Y.%m%d.%H%M')
+          open('pyproject.toml','w').write(re.sub(r'version = \".*\"', f'version = \"{v}\"', open('pyproject.toml').read()))
+          "
+          pip install build twine -q
+          python -m build -q
+          twine upload dist/*
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+ 
