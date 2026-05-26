@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+import subprocess
  
 _dir = Path(__file__).parent / "files"
  
@@ -7,7 +8,7 @@ def main():
     args = sys.argv[1:]
 
     if not args:
-        print("usage: codepaste ls | codepaste cat <name>")
+        print("usage: codepaste ls | codepaste cat <name> | codepaste update")
 
     elif args[0] == "ls":
         print([f.name for f in _dir.iterdir() if f.is_file()])
@@ -18,7 +19,10 @@ def main():
             print(f"'{args[1]}' not found. available: {[f.name for f in _dir.iterdir() if f.is_file()]}")
         else:
             print(matches[0].read_text(encoding="utf-8"))
-            
+
+    elif args[0] == "update":
+        subprocess.run("pip install --upgrade --no-cache-dir codepaste", shell=True)
+        
     else:
-        print("usage: codepaste ls | codepaste cat <name>")
+        print("usage: codepaste ls | codepaste cat <name> | codepaste update")
  
